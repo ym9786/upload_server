@@ -24,10 +24,10 @@ function renderFiles(filesList) {
   filesList.forEach(f => {
     const card = document.createElement("div");
     card.className = "file-card";
-    card.dataset.filename = f.name;
-    card.dataset.fileurl = f.url;
+    card.dataset.filename = f.name;  // 使用后端返回的实际文件名
+    card.dataset.fileurl = f.url;    // 使用后端返回的URL（已编码）
     card.dataset.isImage = f.is_image;
-    card.setAttribute("title", f.name);
+    card.setAttribute("title", f.name);  // 显示完整文件名
 
     if (f.is_image) {
       const img = document.createElement("img");
