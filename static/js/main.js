@@ -1,9 +1,22 @@
+// main.js
 // --- 全局变量 ---
-export let currentPage = 1;
-export const perPage = 10;
-export let totalFiles = 0;
-export let currentFileList = [];
-export let contextMenuEl = null;
+let currentPage = 1;
+let totalFiles = 0;
+let currentFileList = [];
+let contextMenuEl = null;
+let currentKeyword = "";
+const perPage = 10;
+
+// 导出获取和设置函数，而不是直接导出变量
+export function getCurrentPage() { return currentPage; }
+export function setCurrentPage(page) { currentPage = page; }
+export function getTotalFiles() { return totalFiles; }
+export function setTotalFiles(total) { totalFiles = total; }
+export function getCurrentFileList() { return currentFileList; }
+export function setCurrentFileList(files) { currentFileList = files; }
+export function getCurrentKeyword() { return currentKeyword; }
+export function setCurrentKeyword(keyword) { currentKeyword = keyword; }
+export function getPerPage() { return perPage; }
 
 // 初始化入口
 import { fetchFiles } from './fileList.js';
@@ -19,7 +32,3 @@ document.addEventListener("DOMContentLoaded", () => {
   setupContextMenu();
   setupSearch();
 });
-
-// document.getElementById("chooseBtn")?.addEventListener("click", () => {
-//   document.getElementById("fileInput").click();
-// });

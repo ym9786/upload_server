@@ -1,5 +1,6 @@
 import { deleteFile } from './deleteFile.js';
 import { openPreviewFromCard } from './preview.js';
+import { notify, showConfirm } from './notification.js';
 
 export let contextMenuEl = null;
 
@@ -39,12 +40,27 @@ export function showContextMenu(file, x, y) {
   contextMenuEl.style.display = "block";
 }
 
-function handleContextAction(e, file) {
+async function handleContextAction(e, file) {
   const action = e.target.dataset.action;
   contextMenuEl.style.display = "none";
   switch (action) {
-    case "download": window.open(file.url, "_blank"); break;
-    case "delete": if (confirm(`确定删除 ${file.name} 吗？`)) deleteFile(file.name); break;
-    case "info": alert(`文件名：${file.name}\n大小：${(file.size/1024).toFixed(2)} KB\n时间：${file.mtime}`); break;
+    case "download": 
+      window.open(file.url, "_blank"); 
+      break;
+    case "delete": 
+      const confirmed = await showConfirm(`确定删除 ${file.name} 吗？`);
+      if (confirmed) deleteFile(file.name); 
+      break;
+    case "info": 
+      // 使用悬浮提示显示文件信息
+      const fileInfo = `
+        <div style="text-align: left;">
+          <strong>文件名：</strong>${file.name}<br>
+          <strong>大小：</strong>${(file.size/1024).toFixed(2)} KB<br>
+          <strong>时间：</strong>${file.mtime}
+        </div>
+      `;
+      notify.info(fileInfo, 5000);
+      break;
   }
 }

@@ -29,16 +29,30 @@
       </div>
     </div>
 
-    <!-- 📂 文件展示区 -->
-    <div id="fileGrid" class="file-grid">
-      <!-- JS 动态插入文件卡片 -->
-    </div>
+    <!-- 📂 主内容区 -->
+    <div class="main-content">
+      <!-- 左侧：已选择文件列表 -->
+      <div class="file-list-sidebar">
+        <h3>📋 已选择文件</h3>
+        <div id="selectedFilesList" class="selected-files-list">
+          <!-- 已选择文件将在这里显示 -->
+        </div>
+      </div>
 
-    <!-- 📄 分页导航 -->
-    <div class="pagination">
-      <button id="prevPage">上一页</button>
-      <span id="pageInfo"></span>
-      <button id="nextPage">下一页</button>
+      <!-- 右侧：文件展示区 -->
+      <div class="file-display-area">
+        <div id="fileGrid" class="file-grid">
+          <!-- JS 动态插入文件卡片 -->
+        </div>
+
+        <!-- 📄 分页导航 -->
+        <div class="pagination-container">
+          <div id="pageInfo" class="page-info">第 1 页，共 1 页</div>
+          <div id="pagination" class="pagination">
+            <!-- JS 动态生成分页按钮 -->
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
