@@ -1,165 +1,323 @@
-body {
-  font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
-  color: #333;
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 40px;
-}
-.container {
-  background: white;
-  padding: 30px;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 1000px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-h1 { text-align: center; }
-.upload-section, .search-box { text-align: center; margin-bottom: 20px; }
-#progressBar { width: 80%; height: 10px; border-radius: 5px; margin-top: 10px; }
-.search-box input { width: 70%; padding: 8px 12px; border-radius: 8px; border:1px solid #ccc; }
-.search-box input:focus { outline:none; border-color:#66a6ff; box-shadow:0 0 5px #66a6ff; }
-
-.file-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:16px; }
-.file-card { position:relative; background:#f8fafc; border-radius:12px; padding:10px; text-align:center; cursor:pointer; transition:0.2s; }
-.file-card:hover { transform:translateY(-4px); box-shadow:0 6px 12px rgba(0,0,0,0.1); }
-.file-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.file-card:hover::after { content: attr(data-fullname); position:absolute; bottom:-25px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.8); color:white; padding:2px 6px; border-radius:4px; font-size:12px; }
-
-.pagination { margin-top:20px; text-align:center; }
-.pagination button { margin:0 4px; padding:4px 8px; border:none; border-radius:4px; cursor:pointer; }
-.pagination button.active { background:#66a6ff; color:white; }
-
-/* 弹窗遮罩 */
-.modal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease;
-}
-
-/* 弹窗显示 */
-.modal.show {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* 弹窗内容 */
-.modal-content {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  max-width: 90%;
-  max-height: 90%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  animation: expand 0.3s ease forwards;
-}
-
-/* 弹窗动画 */
-@keyframes expand {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-/* 关闭按钮 */
-.close {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  font-size: 24px;
-  font-weight: bold;
-  color: #666;
-  cursor: pointer;
-}
-
-/* 预览容器 */
-#previewContainer img,
-#previewContainer iframe {
-  max-width: 80vw;    /* 屏幕宽度 80% */
-  max-height: 70vh;   /* 屏幕高度 70% */
-  border-radius: 8px;
-  object-fit: contain; /* 保持比例 */
-  margin-bottom: 15px;
-  transition: transform 0.3s ease;
-}
-
-/* 详情文字优化 */
-#fileDetails {
-  padding: 8px 12px;
-  font-size: 14px;
-  color: #333;
-  background: #f8f9fa;
-  border-radius: 8px;
-  width: 100%;
+/* 🌌 全局背景与基础样式 */
+* {
   box-sizing: border-box;
-  line-height: 1.5;
+  margin: 0;
+  padding: 0;
 }
 
-/* 小屏幕适配 */
-@media screen and (max-width: 900px) {
-  #previewContainer img,
-  #previewContainer iframe {
-    max-width: 90vw;
-    max-height: 50vh;
-  }
+body {
+  font-family: "Poppins", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #b7eaff, #e0f7ff, #bde0ff);
+  color: #fff;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-/* 预览窗口里的图片和iframe统一固定大小 */
-#previewContainer img,
-#previewContainer iframe {
-  width: 800px;         /* 固定宽度 */
-  height: 450px;        /* 固定高度 */
-  object-fit: contain;  /* 图片保持比例 */
+/* 🌠 背景粒子层（canvas） */
+#bgCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* 🧊 主容器（半透明玻璃卡片） */
+.container {
+  position: relative;
+  z-index: 2;
+  width: 85%;
+  max-width: 1100px;
+  margin: 60px auto;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 30px 40px;
+  box-shadow: 0 0 30px rgba(0, 150, 255, 0.3);
+}
+
+/* 🪐 标题与按钮区 */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  color: #0d47a1;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+  margin-bottom: 20px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.controls input[type="file"],
+.controls input[type="text"],
+.controls button {
+  border: none;
   border-radius: 8px;
-  margin-bottom: 10px;
-  transition: transform 0.3s ease; /* 缩放动画 */
+  padding: 10px 14px;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s ease;
 }
 
-/* 鼠标悬停或点击可以缩放 */
-#previewContainer img:hover,
-#previewContainer iframe:hover {
+.controls input[type="text"] {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  width: 240px;
+}
+
+.controls button {
+  background: linear-gradient(90deg, #00b4ff, #0066ff);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.controls button:hover {
   transform: scale(1.05);
+  background: linear-gradient(90deg, #009dff, #0055dd);
 }
 
-/* iframe 滚动条 */
-#previewContainer iframe {
-  overflow: auto;
+/* 📁 文件网格布局 */
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--thumb-width, 140px), 1fr));
+  gap: 20px;
+  transition: all 0.3s ease;
+  justify-items: center;
 }
 
-/* 小屏幕适应 */
-@media screen and (max-width: 850px) {
-  #previewContainer img,
-  #previewContainer iframe {
-    width: 90%;
-    height: auto;
-  }
+.file-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  text-align: center;
+  padding: 12px 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  max-width: 150px;
+  overflow: hidden;
 }
-/* 文件列表缩略图固定大小 */
+
+.file-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
+}
+
+/* 文件缩略图固定尺寸 */
 .file-card img,
-.file-card .file-icon {
+.file-icon {
   width: 120px;
   height: 80px;
   object-fit: cover;
   border-radius: 6px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   transition: transform 0.3s ease;
 }
 
-.file-card:hover img,
-.file-card:hover .file-icon {
-  transform: scale(1.1);
-  z-index: 2;
+.file-card:hover img {
+  transform: scale(1.05);
+}
+
+/* 文件名过长时省略 */
+.file-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  color: #001f4d;
+}
+
+.file-name:hover {
+  overflow: visible;
+  white-space: normal;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 2px 4px;
+  z-index: 10;
+  position: relative;
+}
+
+/* 分页按钮 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+  gap: 10px;
+}
+
+.pagination button {
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: #004aad;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.pagination button:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* 🌠 弹窗（预览与详情） */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 20, 40, 0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  border-radius: 16px;
+  padding: 20px;
+  max-width: 80%;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 0 25px rgba(0, 150, 255, 0.4);
+  animation: zoomIn 0.4s ease;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-content img {
+  max-width: 80vw;
+  max-height: 70vh;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close:hover {
+  color: #00bfff;
+}
+
+/* 🖱️ 拖拽缩略图调节按钮 */
+#resizeHandle {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  border-radius: 50%;
+  cursor: nwse-resize;
+  z-index: 9999;
+  box-shadow: 0 0 10px rgba(0, 120, 255, 0.6);
+  transition: transform 0.2s;
+}
+
+#resizeHandle:hover {
+  transform: scale(1.2);
+}
+
+/* 📱 响应式优化 */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+    padding: 20px;
+  }
+  .controls {
+    flex-direction: column;
+  }
+  .controls input[type="text"] {
+    width: 100%;
+  }
+  .file-card img {
+    width: 100px;
+    height: 70px;
+  }
+}
+/* 搜索框样式 */
+#searchInput {
+  border: 2px solid black;
+  border-radius: 6px;
+  padding: 8px 12px;
+  outline: none;
+}
+
+/* 选择文件按钮与上传按钮样式统一 */
+#chooseBtn, #uploadBtn {
+  background: linear-gradient(90deg, #2196f3, #00e0ff);
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  margin: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+#chooseBtn:hover, #uploadBtn:hover {
+  background: linear-gradient(90deg, #00e0ff, #2196f3);
+}
+
+/* 文件名省略 + 鼠标悬浮显示完整 */
+.file-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 120px;
+  color: #0b3d91;
+  position: relative;
+}
+.file-name:hover::after {
+  content: attr(data-fullname);
+  position: absolute;
+  background: #fff;
+  color: #000;
+  padding: 3px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 99;
+  top: -30px;
+  left: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* 文件名悬浮完整显示 tooltip */
+/* TODO 文件名显示框 */
+.file-tooltip {
+  position: fixed;
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 12px;
+  z-index: 9999;
+  pointer-events: none;
 }

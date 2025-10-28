@@ -1,39 +1,61 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>文件管理中心</title>
-<link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🪐 文件管理中心</title>
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
-<div class="container">
-  <h1>📁 文件管理中心</h1>
+  <!-- 🌌 动态星云背景 Canvas -->
+  <canvas id="bgCanvas"></canvas>
 
-  <div class="upload-section">
-    <input type="file" id="fileInput" multiple />
-    <button id="uploadBtn">开始上传</button>
-    <progress id="progressBar" value="0" max="100"></progress>
-    <div id="uploadStatus"></div>
+  <!-- 🧊 主内容容器 -->
+  <div class="container">
+    <div class="header">
+      <h1>🪐 文件管理中心</h1>
+
+      <!-- 🧭 控制区 -->
+      <div class="controls">
+        <!-- 文件选择 -->
+        <label for="fileInput" id="chooseBtn">选择文件</label>
+        <input type="file" id="fileInput" multiple hidden />
+
+        <!-- 上传按钮 -->
+        <button id="uploadBtn">上传文件</button>
+
+        <!-- 搜索框 -->
+        <input type="text" id="searchInput" placeholder="🔍 搜索文件..." />
+      </div>
+    </div>
+
+    <!-- 📂 文件展示区 -->
+    <div id="fileGrid" class="file-grid">
+      <!-- JS 动态插入文件卡片 -->
+    </div>
+
+    <!-- 📄 分页导航 -->
+    <div class="pagination">
+      <button id="prevPage">上一页</button>
+      <span id="pageInfo"></span>
+      <button id="nextPage">下一页</button>
+    </div>
   </div>
 
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="🔍 搜索文件...">
-  </div>
-
-  <div id="fileGrid" class="file-grid"></div>
-  <div class="pagination" id="pagination"></div>
-
-  <!-- 文件预览弹窗 -->
-  <div id="previewModal" class="modal hidden">
+  <!-- 🌠 文件预览与详情弹窗 -->
+  <div id="previewModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <div id="previewContainer"></div>
       <div id="fileDetails"></div>
     </div>
   </div>
-</div>
 
-<script src="/static/uploader.js"></script>
+  <!-- 🖱️ 拖拽缩略图大小控制 -->
+  <div id="resizeHandle" title="拖动调整缩略图大小"></div>
+
+  <!-- 🌠 脚本加载 -->
+  <script src="/static/uploader.js"></script>
+  <script src="/static/canvasmod.js"></script>
 </body>
 </html>
