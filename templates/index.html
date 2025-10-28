@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文件管理中心</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+  <h1>📁 文件管理中心</h1>
+
+  <div class="upload-section">
+    <input type="file" id="fileInput" multiple />
+    <button id="uploadBtn">开始上传</button>
+    <progress id="progressBar" value="0" max="100"></progress>
+    <div id="uploadStatus"></div>
+  </div>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="🔍 搜索文件...">
+  </div>
+
+  <div id="fileGrid" class="file-grid"></div>
+  <div class="pagination" id="pagination"></div>
+
+  <!-- 文件预览弹窗 -->
+  <div id="previewModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="previewContainer"></div>
+      <div id="fileDetails"></div>
+    </div>
+  </div>
+</div>
+
+<script src="/static/uploader.js"></script>
+</body>
+</html>
