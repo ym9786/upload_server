@@ -13,7 +13,7 @@ export function setupUploadHandler() {
     for (let file of files) await uploadFileInChunks(file);
     alert("上传完成！");
     fileInput.value = "";
-    import('./fileList.js').then(mod => mod.fetchFiles());
+    import('./js/fileList.js').then(mod => mod.fetchFiles());
   });
 }
 
