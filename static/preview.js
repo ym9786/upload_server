@@ -1,42 +1,38 @@
-function openImagePreview(filename) {
-  const modal = document.getElementById('previewModal');
-  const img = document.getElementById('previewImage');
-  const downloadBtn = document.getElementById('downloadBtn');
+export function openPreviewFromCard(card) {
+  const filename = card.dataset.filename;
+  const url = card.dataset.fileurl;
+  const isImage = card.dataset.isImage === "true" || card.dataset.isImage === "1";
 
-  img.src = '/preview/' + encodeURIComponent(filename);
-  downloadBtn.href = '/download/' + encodeURIComponent(filename);
-  modal.style.display = 'block';
+  const previewContainer = document.getElementById("previewContainer");
+  previewContainer.innerHTML = "";
+
+  if (isImage) {
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = filename;
+    img.style.maxWidth = "80vw";
+    img.style.maxHeight = "70vh";
+    previewContainer.appendChild(img);
+  } else {
+    const iframe = document.createElement("iframe");
+    iframe.src = url;
+    iframe.style.width = "80vw";
+    iframe.style.height = "70vh";
+    previewContainer.appendChild(iframe);
+  }
+
+  const fileDetails = document.getElementById("fileDetails");
+  fileDetails.innerHTML = `
+    <strong>文件名：</strong>${filename}<br>
+    <strong>类型：</strong>${isImage ? "图片" : "文件"}
+  `;
+
+  document.getElementById("previewModal").style.display = "flex";
 }
 
-document.getElementById('closePreview').onclick = () => {
-  document.getElementById('previewModal').style.display = 'none';
-};
-
-window.onclick = function(event) {
-  const modal = document.getElementById('previewModal');
-  if (event.target == modal) modal.style.display = "none";
-};
-
-// 右键菜单逻辑
-const contextMenu = document.getElementById('contextMenu');
-let currentFile = null;
-
-function openContextMenu(event, filename) {
-  event.preventDefault();
-  currentFile = filename;
-  contextMenu.style.top = `${event.clientY}px`;
-  contextMenu.style.left = `${event.clientX}px`;
-  contextMenu.style.display = 'block';
+export function setupModalClose() {
+  const modal = document.getElementById("previewModal");
+  if (!modal) return;
+  modal.querySelector(".close")?.addEventListener("click", () => modal.style.display = "none");
+  modal.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
 }
-
-window.addEventListener('click', () => contextMenu.style.display = 'none');
-
-document.getElementById('openFile').onclick = () => {
-  window.open('/preview/' + encodeURIComponent(currentFile));
-};
-document.getElementById('downloadFile').onclick = () => {
-  window.location.href = '/download/' + encodeURIComponent(currentFile);
-};
-document.getElementById('detailFile').onclick = () => {
-  alert(`文件名: ${currentFile}`);
-};
